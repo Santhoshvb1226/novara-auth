@@ -3,10 +3,16 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import rateLimit from "express-rate-limit";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET;
+const frontendDist = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../frontend/dist",
+);
 
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET must be set in the environment.");
@@ -14,6 +20,7 @@ if (!JWT_SECRET) {
 
 app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
+app.use(express.static(frontendDist));
 
 // Mock "database": the password is stored hashed, like a real app
 const users = [
@@ -80,6 +87,19 @@ app.get("/api/me", auth, (req, res) => {
   const user = users.find((u) => u.id === req.user.id);
   if (!user) return res.status(404).json({ message: "User not found." });
   res.json({ id: user.id, name: user.name, email: user.email });
+});
+
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
+app.get("/{*path}", (req, res, next) => {
+  if (req.path === "/api" || req.path.startsWith("/api/")) {
+    return res.status(404).json({ message: "Not found." });
+  }
+  res.sendFile(path.join(frontendDist, "index.html"), (error) => {
+    if (error) next(error);
+  });
 });
 
 app.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`));
