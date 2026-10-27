@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-shake: shake 0.45s ease-in-out;
+  --animate-fade-up: fade-up 0.7s ease-out both;
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -30px) scale(1.08); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}

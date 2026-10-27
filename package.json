@@ -1,0 +1,21 @@
+{
+  "name": "novara-auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+   "start": "node --env-file=.env backend/server.js",
+     "dev": "node --watch --env-file=.env backend/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "jsonwebtoken": "^9.0.3"
+  }
+}
